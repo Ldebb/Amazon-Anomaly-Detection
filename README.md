@@ -31,12 +31,39 @@ were performed.
 ## Evaluation Metric
 - Weighted Recall was chosen as the metric for anomaly detection.
 
-## Models
+## Model Performance
 - In order to achieve the best results different linear and non-linear models on the basis of different scoring metrics namely: Accuracy, Roc_Auc, F1-Score  were build using K-Fold Cross Validation, where Number of Splits is considered as 7.
 - For both Accuracy & F-1 Scoring metrics, XGB Classifier gives the best Bias Accuracy and Variance Error Trade Off.
 - Using Grid Search CV hyper paramters were tuned for XGB Classifier where n_estimators : 200, max_depth: 15, Learning_rate:  0.1 was selected.
 - As mentioned above because of manual labeling the anomalies( where rating were not aligned with the reviews), a sample size of 400 was taken out of 40k records with 5% margin of error, 95% Confidence Interval, 10% expected sample proportion(having anomaly) was taken.
-- In actuality there were 16 anomalies in the 400 samples, however the model predicted 51 anomalies, which was calculated by comparing model pred ratings and the user(actual) ratings.
+- In actuality there were 16 anomalies(Y_true) in the 400 samples, however the model predicted 51 anomalies(Y_pred), which was calculated by comparing model pred ratings and the user(actual) ratings.
+
+## Evaluation
+- Model is able identify all the anomalies, but it wrongly identified few non-anomalies as anomalies, which further resulted in 35 False positives and 0 False Negatives.
+- FN is costlier for this particular business case. 
+- The above results are obtained with the default threshold of 0.5. In order to get more better results by decreasing the amount of False Positives without compromising on False Negatives, different thresholds were tuned.
+- Since False Negatives are more costlier, thus aim was to maximize the recall.
+
+## Statistical Data Analysis
+- Hypothesis:
+Null hypothesis: Weighted Recall = 0.95
+Alternate Hypothesis: Weighted Recall ≠ 0.95
+
+## Conclusion
+- After tuning the threshold to different values using XGB Classifier, 0.4 threshold gave the best results, ith a pvalue >0.05. Which further means that the null hypothesis holds true.
+- Obtained a 100% Recall, ie: False Negatives are 0 and a reduction in False Positives from 35 to 28 was observed.
+
+## Business Recommendation:
+
+FP only costs a message that is sent to the user whereas FN affects the users’ trust on the website as it directly affects the ratings. So to the client, recommendation can be to send a text message/email to the user to inform them about the difference between their rating and review thus allowing them to change their rating or review. Hence, the rating will be true to users’ experience. 
+
+
+
+
+
+
+
+
 
 
 
